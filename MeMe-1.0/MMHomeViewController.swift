@@ -11,6 +11,9 @@ import UIKit
 class MMHomeViewController: UIViewController {
 
     @IBOutlet weak var cameraBarButtonItem: UIBarButtonItem!
+    @IBOutlet weak var pictureImageView: UIImageView!
+    @IBOutlet weak var topTextField: UITextField!
+    @IBOutlet weak var bottomTextField: UITextField!
     
     // MARK: View LifeCycle
     
