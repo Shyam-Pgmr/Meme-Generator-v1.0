@@ -37,6 +37,7 @@ class MMHomeViewController: UIViewController {
     func setupView() {
     
         enableOrDisbleCameraButtonBasedOnAvailability()
+        setupTextFieldAttributes()
     }
     
     func openCamera() {
@@ -48,7 +49,18 @@ class MMHomeViewController: UIViewController {
     }
     
     func enableOrDisbleCameraButtonBasedOnAvailability() {
-        cameraBarButtonItem.isEnabled = true
+        cameraBarButtonItem.isEnabled = TARGET_OS_SIMULATOR != 0
     }
     
+    func setupTextFieldAttributes() {
+        
+        let textAttributes:[String:Any] = [
+            NSStrokeColorAttributeName: UIColor.black,
+            NSForegroundColorAttributeName: UIColor.white,
+            NSFontAttributeName: UIFont.systemFont(ofSize: 40.0),
+            NSStrokeWidthAttributeName: 2.0]
+        
+        topTextField.defaultTextAttributes = textAttributes;
+        bottomTextField.defaultTextAttributes = textAttributes;
+    }
 }
