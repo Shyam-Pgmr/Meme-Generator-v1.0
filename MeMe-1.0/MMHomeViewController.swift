@@ -10,10 +10,13 @@ import UIKit
 
 class MMHomeViewController: UIViewController {
 
+    @IBOutlet weak var cameraBarButtonItem: UIBarButtonItem!
+    
+    // MARK: View LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
     }
 
     // MARK: Actions
@@ -28,12 +31,21 @@ class MMHomeViewController: UIViewController {
     
     // MARK: Helper
     
+    func setupView() {
+    
+        enableOrDisbleCameraButtonBasedOnAvailability()
+    }
+    
     func openCamera() {
         
     }
     
     func openAlbum() {
         
+    }
+    
+    func enableOrDisbleCameraButtonBasedOnAvailability() {
+        cameraBarButtonItem.isEnabled = true
     }
     
 }
