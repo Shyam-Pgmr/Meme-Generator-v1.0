@@ -16,4 +16,24 @@ class MMHomeViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
+    // MARK: Actions
+    
+    @IBAction func cameraButtonTapAction(_ sender: UIBarButtonItem) {
+        
+    }
+
+    @IBAction func albumButtonTapAction(_ sender: UIBarButtonItem) {
+        
+    }
+    
+    // MARK: Helper
+    
+    func openCamera() {
+        
+    }
+    
+    func openAlbum() {
+        
+    }
+    
 }
