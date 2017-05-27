@@ -51,9 +51,11 @@ class MMHomeViewController: UIViewController {
     
     @IBAction func shareButtonTapAction(_ sender: UIBarButtonItem) {
         
-        let imageToShare = UIImage()
-        let controller = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
-        present(controller, animated: true, completion: nil)
+        if let imageToShare = generateMeMeImage() {
+        
+            let controller = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
+            present(controller, animated: true, completion: nil)
+        }
     }
     
     // MARK: Helper
@@ -61,6 +63,7 @@ class MMHomeViewController: UIViewController {
     func setupView() {
     
         enableOrDisbleCameraButtonBasedOnAvailability()
+        enableOrDisbleShareButtonBasedOnAvailability()
         setupTextFieldAttributes()
     }
     
@@ -95,8 +98,9 @@ class MMHomeViewController: UIViewController {
     }
     
     func enableOrDisbleShareButtonBasedOnAvailability() {
-        // TODO:
-        shareBarButtonItem.isEnabled = false
+        
+        // Enable Share option only when image, top text or bottom text is set
+        shareBarButtonItem.isEnabled = (pictureImageView.image != nil && (!topTextField.isEmpty() || !bottomTextField.isEmpty()))
     }
     
     func setupTextFieldAttributes() {
@@ -146,7 +150,7 @@ class MMHomeViewController: UIViewController {
     
     func generateMeMeImage() -> UIImage? {
         
-        // Hide naviation bar and toolbar
+        // Hide naviation bar and toolbar so that It is not capture while taking snapshot
         navigationController?.navigationBar.isHidden = true
         toolbar.isHidden = true
         
@@ -157,8 +161,9 @@ class MMHomeViewController: UIViewController {
         let memeImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        navigationController?.navigationBar.isHidden = true
-        toolbar.isHidden = true
+        // Show naviation bar and toolbar
+        navigationController?.navigationBar.isHidden = false
+        toolbar.isHidden = false
         
         return memeImage
     }
@@ -173,15 +178,36 @@ extension MMHomeViewController: UINavigationControllerDelegate, UIImagePickerCon
         
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             pictureImageView.image = image
+            enableOrDisbleShareButtonBasedOnAvailability()
         }
     }
 }
 
+// MARK: TextField Delegate
+
 extension MMHomeViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        textField.resignFirstResponder() // To close keyboard
         return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        enableOrDisbleShareButtonBasedOnAvailability()
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        enableOrDisbleShareButtonBasedOnAvailability()
+    }
+}
+
+
+// MARK: TextField Helper
+
+extension UITextField {
+    
+    func isEmpty() -> Bool {
+       return (self.text ?? "").isEmpty
     }
 }
 
