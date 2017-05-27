@@ -30,6 +30,14 @@ class MMHomeViewController: UIViewController {
         setupView()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        addObserverForKeyboard()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        removeObserverForKeyboard()
+    }
+    
     // MARK: Actions
     
     @IBAction func cameraButtonTapAction(_ sender: UIBarButtonItem) {
@@ -50,6 +58,16 @@ class MMHomeViewController: UIViewController {
     
         enableOrDisbleCameraButtonBasedOnAvailability()
         setupTextFieldAttributes()
+    }
+    
+    func addObserverForKeyboard() {
+        NotificationCenter.default.addObserver(self, selector: #selector(slideViewUp(notification:)), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(slideViewDown(notification:)), name: .UIKeyboardWillHide, object: nil)
+    }
+    
+    func removeObserverForKeyboard() {
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
     }
     
     func openCamera() {
@@ -97,6 +115,29 @@ class MMHomeViewController: UIViewController {
 
         topTextField.attributedPlaceholder = attributedTextForTopTextField
         bottomTextField.attributedPlaceholder = attributedTextForBottomTextField
+        
+    }
+
+    func slideViewUp(notification:NSNotification) {
+        
+        guard bottomTextField.isFirstResponder else {
+            return
+        }
+        
+        if let value = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            
+            let keyboardHeight = value.cgRectValue.size.height
+            UIView.animate(withDuration: 0.25, animations: {
+                self.view.transform = CGAffineTransform(translationX: 0, y: -keyboardHeight)
+            })
+        }
+    }
+    
+    func slideViewDown(notification:NSNotification) {
+        
+        UIView.animate(withDuration: 0.25, animations: {
+            self.view.transform = CGAffineTransform.identity
+        })
         
     }
 }
