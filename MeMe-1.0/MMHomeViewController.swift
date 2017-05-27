@@ -50,12 +50,7 @@ class MMHomeViewController: UIViewController {
     }
     
     @IBAction func shareButtonTapAction(_ sender: UIBarButtonItem) {
-        
-        if let imageToShare = generateMeMeImage() {
-        
-            let controller = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
-            present(controller, animated: true, completion: nil)
-        }
+        shareMeme()
     }
     
     // MARK: Helper
@@ -93,6 +88,22 @@ class MMHomeViewController: UIViewController {
         present(imagePicker, animated: true, completion: nil)
     }
     
+    func shareMeme() {
+        
+        if let imageToShare = generateMeMeImage() {
+            
+            let controller = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
+            controller.completionWithItemsHandler = {(type,completion,returnItems,error) in
+            
+                if completion {
+                    self.saveMeme(using: imageToShare)
+                }
+            }
+                
+            present(controller, animated: true, completion: nil)
+        }
+    }
+    
     func enableOrDisbleCameraButtonBasedOnAvailability() {
         cameraBarButtonItem.isEnabled = TARGET_OS_SIMULATOR == 0
     }
@@ -100,7 +111,7 @@ class MMHomeViewController: UIViewController {
     func enableOrDisbleShareButtonBasedOnAvailability() {
         
         // Enable Share option only when image, top text or bottom text is set
-        shareBarButtonItem.isEnabled = (pictureImageView.image != nil && (!topTextField.isEmpty() || !bottomTextField.isEmpty()))
+        shareBarButtonItem.isEnabled = (pictureImageView.image != nil && (!topTextField.isEmpty || !bottomTextField.isEmpty))
     }
     
     func setupTextFieldAttributes() {
@@ -167,6 +178,12 @@ class MMHomeViewController: UIViewController {
         
         return memeImage
     }
+    
+    func saveMeme(using memeImage:UIImage) {
+        
+        let memeModel = MeMeModel(topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage: pictureImageView.image!, memeImage: memeImage)
+    }
+    
 }
 
 // MARK: Image Picker Delegate
@@ -206,8 +223,9 @@ extension MMHomeViewController: UITextFieldDelegate {
 
 extension UITextField {
     
-    func isEmpty() -> Bool {
-       return (self.text ?? "").isEmpty
+    var isEmpty:Bool {
+        get {
+            return (self.text ?? "").isEmpty
+        }
     }
 }
-
