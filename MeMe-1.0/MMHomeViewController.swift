@@ -10,11 +10,18 @@ import UIKit
 
 class MMHomeViewController: UIViewController {
 
+    // MARK: Outlets
+    
     @IBOutlet weak var cameraBarButtonItem: UIBarButtonItem!
     @IBOutlet weak var shareBarButtonItem: UIBarButtonItem!
     @IBOutlet weak var pictureImageView: UIImageView!
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
+    
+    // MARK: Constants
+    
+    let TOP = "Top"
+    let BOTTOM = "Bottom"
     
     // MARK: View LifeCycle
     
@@ -84,6 +91,13 @@ class MMHomeViewController: UIViewController {
         
         topTextField.defaultTextAttributes = textAttributes;
         bottomTextField.defaultTextAttributes = textAttributes;
+        
+        let attributedTextForTopTextField = NSAttributedString(string: TOP, attributes: textAttributes)
+        let attributedTextForBottomTextField = NSAttributedString(string: BOTTOM, attributes: textAttributes)
+
+        topTextField.attributedPlaceholder = attributedTextForTopTextField
+        bottomTextField.attributedPlaceholder = attributedTextForBottomTextField
+        
     }
 }
 
@@ -97,6 +111,14 @@ extension MMHomeViewController: UINavigationControllerDelegate, UIImagePickerCon
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             pictureImageView.image = image
         }
+    }
+}
+
+extension MMHomeViewController: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 

@@ -33,7 +33,7 @@
                                     <constraint firstAttribute="height" constant="50" id="uc7-yp-qlw"/>
                                 </constraints>
                                 <nil key="textColor"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" returnKeyType="done"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="6MA-ew-6G8"/>
                                 </connections>
@@ -45,7 +45,7 @@
                                     <constraint firstAttribute="height" constant="50" id="fyR-hf-suQ"/>
                                 </constraints>
                                 <nil key="textColor"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" returnKeyType="done"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="CJF-9l-Jun"/>
                                 </connections>
@@ -53,7 +53,7 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bF4-qP-c2T">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items>
-                                    <barButtonItem title="Camera" id="YU0-Cm-F3z">
+                                    <barButtonItem systemItem="camera" id="YU0-Cm-F3z">
                                         <connections>
                                             <action selector="cameraButtonTapAction:" destination="BYZ-38-t0r" id="zk3-SP-Yfu"/>
                                         </connections>
@@ -85,7 +85,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="u0D-W0-DjQ">
-                        <barButtonItem key="leftBarButtonItem" title="Share" id="tsG-tW-sBl">
+                        <barButtonItem key="leftBarButtonItem" systemItem="action" id="tsG-tW-sBl">
                             <connections>
                                 <action selector="shareButtonTapAction:" destination="BYZ-38-t0r" id="HZz-vl-pn6"/>
                             </connections>
