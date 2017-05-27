@@ -96,6 +96,7 @@
                         <outlet property="cameraBarButtonItem" destination="YU0-Cm-F3z" id="3vK-h5-mRg"/>
                         <outlet property="pictureImageView" destination="rdv-do-dUE" id="5LS-uq-w0N"/>
                         <outlet property="shareBarButtonItem" destination="tsG-tW-sBl" id="9j9-oi-JBC"/>
+                        <outlet property="toolbar" destination="bF4-qP-c2T" id="aam-Lf-KUn"/>
                         <outlet property="topTextField" destination="dmj-MZ-8gV" id="MXa-VC-6Wx"/>
                     </connections>
                 </viewController>

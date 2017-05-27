@@ -17,6 +17,7 @@ class MMHomeViewController: UIViewController {
     @IBOutlet weak var pictureImageView: UIImageView!
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
+    @IBOutlet weak var toolbar: UIToolbar!
     
     // MARK: Constants
     
@@ -50,6 +51,9 @@ class MMHomeViewController: UIViewController {
     
     @IBAction func shareButtonTapAction(_ sender: UIBarButtonItem) {
         
+        let imageToShare = UIImage()
+        let controller = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
+        present(controller, animated: true, completion: nil)
     }
     
     // MARK: Helper
@@ -138,7 +142,25 @@ class MMHomeViewController: UIViewController {
         UIView.animate(withDuration: 0.25, animations: {
             self.view.transform = CGAffineTransform.identity
         })
+    }
+    
+    func generateMeMeImage() -> UIImage? {
         
+        // Hide naviation bar and toolbar
+        navigationController?.navigationBar.isHidden = true
+        toolbar.isHidden = true
+        
+        // Create UIImage by snapshotting screen's super view
+        UIGraphicsBeginImageContext(view.frame.size)
+        view.drawHierarchy(in: view.frame, afterScreenUpdates: true)
+        
+        let memeImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        navigationController?.navigationBar.isHidden = true
+        toolbar.isHidden = true
+        
+        return memeImage
     }
 }
 
