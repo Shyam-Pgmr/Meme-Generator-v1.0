@@ -23,6 +23,19 @@ class MMHomeViewController: UIViewController {
     
     let TOP = "Top"
     let BOTTOM = "Bottom"
+    let textAttributes:[String:Any] = {
+        let paragraphStype = NSMutableParagraphStyle()
+        paragraphStype.alignment = .center
+        
+        var attributes:[String: Any] = [
+            NSFontAttributeName: UIFont.systemFont(ofSize: 60.0),
+            NSStrokeWidthAttributeName: -2.0,
+            NSParagraphStyleAttributeName: paragraphStype,
+            NSStrokeColorAttributeName: UIColor.black,
+            NSForegroundColorAttributeName: UIColor.white]
+        
+        return attributes
+    }()
     
     // MARK: View LifeCycle
     
@@ -32,21 +45,23 @@ class MMHomeViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         addObserverForKeyboard()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         removeObserverForKeyboard()
     }
     
     // MARK: Actions
     
     @IBAction func cameraButtonTapAction(_ sender: UIBarButtonItem) {
-        openCamera()
+        presentPicker(with: .camera)
     }
 
     @IBAction func albumButtonTapAction(_ sender: UIBarButtonItem) {
-        openAlbum()
+        presentPicker(with: .photoLibrary)
     }
     
     @IBAction func shareButtonTapAction(_ sender: UIBarButtonItem) {
@@ -72,20 +87,11 @@ class MMHomeViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
     }
     
-    func openCamera() {
-        
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .camera
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
-    func openAlbum() {
-        
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        present(imagePicker, animated: true, completion: nil)
+    func presentPicker(with sourceType:UIImagePickerControllerSourceType) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = sourceType
+        present(picker, animated: true, completion: nil)
     }
     
     func shareMeme() {
@@ -105,7 +111,7 @@ class MMHomeViewController: UIViewController {
     }
     
     func enableOrDisbleCameraButtonBasedOnAvailability() {
-        cameraBarButtonItem.isEnabled = TARGET_OS_SIMULATOR == 0
+        cameraBarButtonItem.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
     }
     
     func enableOrDisbleShareButtonBasedOnAvailability() {
@@ -114,29 +120,18 @@ class MMHomeViewController: UIViewController {
         shareBarButtonItem.isEnabled = (pictureImageView.image != nil && (!topTextField.isEmpty || !bottomTextField.isEmpty))
     }
     
-    func setupTextFieldAttributes() {
-        
-        let paragraphStype = NSMutableParagraphStyle()
-        paragraphStype.alignment = .center
-        
-        let textAttributes:[String:Any] = [
-            NSFontAttributeName: UIFont.systemFont(ofSize: 60.0),
-            NSStrokeWidthAttributeName: -2.0,
-            NSParagraphStyleAttributeName: paragraphStype,
-            NSStrokeColorAttributeName: UIColor.black,
-            NSForegroundColorAttributeName: UIColor.white]
-        
-        topTextField.defaultTextAttributes = textAttributes;
-        bottomTextField.defaultTextAttributes = textAttributes;
-        
-        let attributedTextForTopTextField = NSAttributedString(string: TOP, attributes: textAttributes)
-        let attributedTextForBottomTextField = NSAttributedString(string: BOTTOM, attributes: textAttributes)
+    func configApperance(of textField:UITextField, with text:String) {
 
-        topTextField.attributedPlaceholder = attributedTextForTopTextField
-        bottomTextField.attributedPlaceholder = attributedTextForBottomTextField
-        
+        let attributedTextForTextField = NSAttributedString(string: text, attributes: textAttributes)
+        textField.defaultTextAttributes = textAttributes
+        textField.attributedPlaceholder = attributedTextForTextField
     }
 
+    func setupTextFieldAttributes() {
+        configApperance(of: topTextField, with: TOP)
+        configApperance(of: bottomTextField, with: BOTTOM)
+    }
+    
     func slideViewUp(notification:NSNotification) {
         
         guard bottomTextField.isFirstResponder else {
@@ -181,7 +176,7 @@ class MMHomeViewController: UIViewController {
     
     func saveMeme(using memeImage:UIImage) {
         
-        let memeModel = MeMeModel(topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage: pictureImageView.image!, memeImage: memeImage)
+        let meme = MeMe(topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage: pictureImageView.image!, memeImage: memeImage)
     }
     
 }
