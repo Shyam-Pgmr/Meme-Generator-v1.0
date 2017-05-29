@@ -43,5 +43,7 @@
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to let you choose pictures from Album</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Using camera you can capture image while creating meme</string>
 </dict>
 </plist>
